@@ -4,10 +4,12 @@
 '''
 # Import Flask, render_template, request from the flask pramework package : TO DO
 # Import the sentiment_analyzer function from the package created: TO DO
+from flask import  Flask, render_template, request
+from SentimentAnalysis.sentiment_analysis import sentiment_analyzer
 
 
 #Initiate the flask app : TO DO
-
+app = Flask('Sentiment Analyzer') # general calling out app = Flask(__name__)
 @app.route("/sentimentAnalyzer")
 def sent_analyzer():
     ''' This code receives the text from the HTML interface and 
@@ -16,14 +18,33 @@ def sent_analyzer():
         score for the provided text.
     '''
     # TO DO
+    # Retrieve the text to analyze from the request arguments
+    # 'textToAnalyze' is defined in the JS file mywebscript.js
+    text_to_analyze = request.args.get('textToAnalyze')
+
+    # Pass the text to the sentiment_analyzer function and store the response
+    response = sentiment_analyzer(text_to_analyze)
+
+    # Extract the label and score from the response
+    # label and score are returned keys from the sentiment_analysis.py
+    label = response['label']
+    score = response['score']
+
+    # Return a formatted string with the sentiment label and score
+    return "The given text has been identified as {} with a score of {}.".format(label.split('_')[1], score)
+
 
 @app.route("/")
 def render_index_page():
     ''' This function initiates the rendering of the main application
         page over the Flask channel
+        It simply runs the render_template function on the HTML template, index.html 
     '''
     #TO DO
+    return render_template('index.html')
 
 if __name__ == "__main__":
     ''' This functions executes the flask app and deploys it on localhost:5000
-    '''#TO DO
+    '''
+    #explicit port definition. However by dedault flask uses this port 
+    app.run(host="0.0.0.0", port=5000)
