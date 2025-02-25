@@ -27,12 +27,17 @@ def sent_analyzer():
 
     # Extract the label and score from the response
     # label and score are returned keys from the sentiment_analysis.py
+
+    # Extract the label and score from the response
     label = response['label']
     score = response['score']
-
-    # Return a formatted string with the sentiment label and score
-    return "The given text has been identified as {} with a score of {}.".format(label.split('_')[1], score)
-
+    # Check if the label is None, indicating an error or invalid input
+    if label is None:
+        return "Invalid input! Try again."
+        
+    else:
+        # Return a formatted string with the sentiment label and score
+        return "The given text has been identified as {} with a score of {}.".format(label.split('_')[1], score)
 
 @app.route("/")
 def render_index_page():
@@ -47,4 +52,4 @@ if __name__ == "__main__":
     ''' This functions executes the flask app and deploys it on localhost:5000
     '''
     #explicit port definition. However by dedault flask uses this port 
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=5001)
